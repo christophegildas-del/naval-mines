@@ -1,21 +1,23 @@
-# Étape 1 : Build du serveur uniquement avec JDK 17
+# 1. Image pour la compilation avec JDK 17
 FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 
+# Copie de tout le code du projet
 COPY . .
 
-# Donner les permissions d'exécution
+# Rendre le script Gradle exécutable
 RUN chmod +x gradlew
 
-# Exécuter le build UNIQUEMENT sur le sous-projet server (ignore Android)
-RUN ./gradlew :html:build --no-daemon -x test
+# On compile UNIQUEMENT le module core (la logique métier du jeu)
+# et on exclut explicitement le module Android (-x :android:build)
+RUN ./gradlew :core:build --no-daemon -x test -x :android:build
 
-# Étape 2 : Image d'exécution légère (JRE 17)
+# 2. Image légère pour exécuter le serveur
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Copier le JAR du serveur compilé
-COPY --from=build /app/server/build/libs/*.jar app.jar
+# Copie du binaire compilé
+COPY --from=build /app/core/build/libs/*.jar app.jar
 
 EXPOSE 8080
 
