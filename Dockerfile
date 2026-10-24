@@ -1,23 +1,20 @@
-# 1. Image pour la compilation avec JDK 17
+# Étape 1 : Build de l'application
 FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 
-# Copie de tout le code du projet
 COPY . .
 
-# Rendre le script Gradle exécutable
 RUN chmod +x gradlew
 
-# On compile UNIQUEMENT le module core (la logique métier du jeu)
-# et on exclut explicitement le module Android (-x :android:build)
-RUN ./gradlew :core:build --no-daemon -x test -x :android:build
+# On compile le module exécutable (lwjgl3 ou teavm) en ignorant android
+RUN ./gradlew :lwjgl3:jar --no-daemon -x test -x :android:build
 
-# 2. Image légère pour exécuter le serveur
+# Étape 2 : Image d'exécution légère JRE 17
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Copie du binaire compilé
-COPY --from=build /app/core/build/libs/*.jar app.jar
+# Copie du JAR exécutable généré par lwjgl3
+COPY --from=build /app/lwjgl3/build/libs/*.jar app.jar
 
 EXPOSE 8080
 
