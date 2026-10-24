@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+    id 'org.teavm.cli' version '0.9.2'
+}
+
+dependencies {
+    implementation project(':core')
+    implementation "com.github.mgsx-dev.gdx-teavm:gdx-teavm:1.0.0"
+}
+
+teavm {
+    all {
+        mainClass = 'com.monjeu.teavm.TeaVMLauncher' // Remplace par ton package exact
+        targetDirectory = file("$buildDir/dist/webapp")
+    }
+}
