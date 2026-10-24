@@ -1,23 +1,21 @@
-# 1. Étape de compilation (Build)
+# Étape 1 : Build de l'application avec JDK 17
 FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 
-# Copie des fichiers du projet
+# Copie de l'ensemble du projet
 COPY . .
 
-# Donner les permissions d'exécution au script Gradle et compiler le serveur
+# Donner les permissions d'exécution et compiler tout le projet
 RUN chmod +x gradlew
-RUN ./gradlew server:build html:build --no-daemon
+RUN ./gradlew build --no-daemon -x test
 
-# 2. Étape d'exécution (Runtime)
+# Étape 2 : Image d'exécution légère (JRE 17)
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Copie du fichier .jar compilé depuis l'étape précédente
-COPY --from=build /app/server/build/libs/server-1.0.0.jar app.jar
+# Copie du JAR compilé (ajuste le dossier si ton module s'appelle différemment)
+COPY --from=build /app/server/build/libs/*.jar app.jar
 
-# Configuration du port
 EXPOSE 8080
 
-# Lancement de l'application Java
 CMD ["java", "-jar", "app.jar"]
