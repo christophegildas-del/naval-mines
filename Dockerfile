@@ -8,7 +8,7 @@ COPY . .
 RUN chmod +x gradlew
 
 # Exécuter le build UNIQUEMENT sur le sous-projet server (ignore Android)
-RUN ./gradlew :server:build --no-daemon -x test
+RUN ./gradlew :html:build --no-daemon -x test
 
 # Étape 2 : Image d'exécution légère (JRE 17)
 FROM eclipse-temurin:17-jre
