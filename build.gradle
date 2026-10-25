@@ -4,6 +4,7 @@ buildscript {
     gradlePluginPortal()
   }
   ext {
+    appName = 'naval_mines'
     gdxVersion = '1.12.1'
   }
 }
@@ -16,7 +17,7 @@ allprojects {
     mavenCentral()
   }
 
-  // Méthode 1 : Règle de compatibilité JVM pour débloquer le variant matching du plugin TeaVM
+  // Règle de compatibilité JVM pour débloquer le variant matching du plugin TeaVM
   dependencies {
     attributesSchema {
       attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE) {
@@ -26,7 +27,6 @@ allprojects {
   }
 }
 
-// Méthode 2 : Alignement global du bytecode sur Java 11 pour tous les sous-modules
 configure(subprojects) {
   apply plugin: 'java-library'
 
@@ -36,11 +36,9 @@ configure(subprojects) {
   }
 }
 
-// Implémentation de la règle de compatibilité d'attributs (Méthode 1)
 class TargetJvmVersionCompatibilityRule implements AttributeCompatibilityRule<Integer> {
   @Override
   void execute(CompatibilityCheckDetails<Integer> details) {
-    // Déclare les versions JVM demandées et fournies comme toujours compatibles
     details.compatible()
   }
 }
