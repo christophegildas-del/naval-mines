@@ -1,6 +1,6 @@
 plugins {
   id 'java'
-  id 'org.teavm' version '0.9.2'
+  id 'org.teavm' version '0.9.1' // Version alignée avec backend-teavm 1.0.0
 }
 
 java {
@@ -34,7 +34,6 @@ teavm {
   }
 }
 
-// Forcer Gradle à exécuter la transpilation TeaVM lors de l'exécution de ./gradlew :teavm:build
 afterEvaluate {
   tasks.named('build').configure {
     dependsOn tasks.matching { it.name.toLowerCase().contains('teavm') || it.name.toLowerCase().contains('javascript') }
