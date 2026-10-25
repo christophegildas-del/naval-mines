@@ -11,6 +11,5 @@ dependencyResolutionManagement {
   }
 }
 
-
 rootProject.name = 'naval_mines'
-include 'core', 'lwjgl3', 'teavm'
+include 'core', 'html', 'lwjgl3'

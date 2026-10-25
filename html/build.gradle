@@ -1,0 +1,28 @@
+plugins {
+  id 'java'
+  id 'org.gretty' version '3.1.0'
+}
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation project(':core')
+  implementation "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
+  implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+  implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+}
+
+task dist(type: Copy) {
+  dependsOn 'draftCompileGwt'
+  from "$buildDir/gwt/draftOut"
+  into "$buildDir/dist"
+}
+
+build.dependsOn dist

@@ -1,23 +1,17 @@
-# Étape 1 : Build de l'application Web avec Gradle
+# Étape 1 : Compilation Web avec GWT
 FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 
-# Copie de l'intégralité du projet
 COPY . .
 
-# Rendre le script exécutable et compiler le module TeaVM
 RUN chmod +x gradlew
-RUN ./gradlew :teavm:build --no-daemon -x test
+RUN ./gradlew :html:dist --no-daemon -x test
 
-# Vérification du contenu généré (utile dans les logs)
-RUN ls -la /app/teavm/build/teavm/web
-
-# Étape 2 : Servir les fichiers statiques HTML/JS
+# Étape 2 : Serveur HTTP de production
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Copie des fichiers compilés
-COPY --from=build /app/teavm/build/teavm/web /app/www
+COPY --from=build /app/html/build/dist /app/www
 
 EXPOSE 8080
 
