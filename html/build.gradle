@@ -41,3 +41,12 @@ tasks.register('dist', Copy) {
 tasks.named('build') {
   dependsOn tasks.named('dist')
 }
+
+sourceSets {
+  main {
+    // Ajoute les sources du core pour le compilateur GWT
+    java.srcDirs += project(':core').sourceSets.main.java.srcDirs
+    // GWT considère les .java et .gwt.xml comme des ressources à parser
+    resources.srcDirs += project(':core').sourceSets.main.java.srcDirs
+  }
+}
