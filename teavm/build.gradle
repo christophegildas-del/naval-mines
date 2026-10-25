@@ -8,7 +8,7 @@ java {
   targetCompatibility = JavaVersion.VERSION_11
 }
 
-// Appliquer les attributs JVM uniquement sur les configurations autorisées (Resolvable / Consumable)
+// Application des attributs JVM uniquement sur les configurations autorisées
 configurations.configureEach {
   if (canBeResolved || canBeConsumed) {
     attributes {
@@ -30,6 +30,13 @@ dependencies {
 teavm {
   js {
     mainClass = 'com.naval_mines.teavm.TeaVMLauncher'
-    outputDir = layout.buildDirectory.dir("teavm/web").get().asFile
+    outputDir = file("${buildDir}/teavm/web")
+  }
+}
+
+// Forcer Gradle à exécuter la transpilation TeaVM lors de l'exécution de ./gradlew :teavm:build
+afterEvaluate {
+  tasks.named('build').configure {
+    dependsOn tasks.matching { it.name.toLowerCase().contains('teavm') || it.name.toLowerCase().contains('javascript') }
   }
 }

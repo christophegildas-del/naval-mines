@@ -1,4 +1,4 @@
-# Étape 1 : Build de l'application Web avec Gradle et Java 17
+# Étape 1 : Build de l'application Web avec Gradle
 FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 
@@ -9,11 +9,14 @@ COPY . .
 RUN chmod +x gradlew
 RUN ./gradlew :teavm:build --no-daemon -x test
 
+# Vérification du contenu généré (utile dans les logs)
+RUN ls -la /app/teavm/build/teavm/web
+
 # Étape 2 : Servir les fichiers statiques HTML/JS
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Copie des fichiers compilés depuis /app/teavm/build/teavm/web
+# Copie des fichiers compilés
 COPY --from=build /app/teavm/build/teavm/web /app/www
 
 EXPOSE 8080
