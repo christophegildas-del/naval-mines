@@ -1,5 +1,6 @@
 plugins {
   id 'java'
+  id 'org.wisepersist.gwt' version '1.1.18'
   id 'org.gretty' version '3.1.0'
 }
 
@@ -19,10 +20,24 @@ dependencies {
   implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
 }
 
-task dist(type: Copy) {
-  dependsOn 'draftCompileGwt'
-  from "$buildDir/gwt/draftOut"
-  into "$buildDir/dist"
+// Correction des avertissements 'gwt' et 'modules' via le bloc d'extension explicite
+gwt {
+  gwtVersion = '2.9.0'
+  maxHeapSize = '1024m'
+  minHeapSize = '256m'
+  modules = ['io.github.naval_mines.GwtDefinition']
 }
 
-build.dependsOn dist
+// Correction de 'task is deprecated', 'buildDir is deprecated' et 'dependsOn'
+tasks.register('dist', Copy) {
+  dependsOn tasks.named('compileGwt')
+  from layout.buildDirectory.dir("gwt/out")
+  into layout.buildDirectory.dir("dist")
+
+  // Inclure la page d'accueil statique
+  from 'src/main/webapp'
+}
+
+tasks.named('build') {
+  dependsOn tasks.named('dist')
+}
