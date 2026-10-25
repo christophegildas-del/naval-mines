@@ -13,8 +13,8 @@ RUN ./gradlew :teavm:build --no-daemon -x test
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Copie des fichiers HTML/JS/WASM générés dans build/dist
-COPY --from=build /app/teavm/build/dist /app/www
+# Copie des fichiers compilés depuis /app/teavm/build/teavm/web
+COPY --from=build /app/teavm/build/teavm/web /app/www
 
 EXPOSE 8080
 

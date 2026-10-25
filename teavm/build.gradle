@@ -21,7 +21,6 @@ dependencies {
 teavm {
   js {
     mainClass = 'com.naval_mines.teavm.TeaVMLauncher'
-    // Forcer le dossier de sortie dans build/dist
-    outputDir = file("${buildDir}/dist")
+    outputDir = layout.buildDirectory.dir("teavm/web").get().asFile
   }
 }
