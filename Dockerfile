@@ -19,3 +19,4 @@ COPY --from=build /app/teavm/build/dist/webapp /app/www
 EXPOSE 8080
 
 CMD ["jwebserver", "-d", "/app/www", "-p", "8080", "-b", "0.0.0.0"]
+
