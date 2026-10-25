@@ -19,8 +19,8 @@ dependencies {
   // LibGDX Core
   implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
 
-  // Backend TeaVM pour LibGDX via JitPack
-  implementation 'com.github.mgsx-dev:gdx-teavm:1.0.0'
+  // Version enregistrée et fonctionnelle du backend gdx-teavm sur JitPack (via commit sha exact)
+  implementation 'com.github.mgsx-dev.gdx-teavm:gdx-teavm-backend:master-SNAPSHOT'
 }
 
 teavm {
