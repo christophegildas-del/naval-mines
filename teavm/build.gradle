@@ -16,7 +16,7 @@ repositories {
 dependencies {
   implementation project(':core')
   // Utilisation d'un commit hash / release valide sur JitPack
-  implementation 'com.github.mgsx-dev:gdx-teavm:1.0.0-b1'
+  implementation 'com.github.mgsx-dev:gdx-teavm:c3df5e9'
 }
 
 teavm {
