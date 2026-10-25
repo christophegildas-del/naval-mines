@@ -2,14 +2,10 @@
 FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 
-# Copie des fichiers de configuration Gradle
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle settings.gradle gradle.properties ./
-COPY core core
-COPY teavm teavm
+# Copie de l'intégralité du projet
+COPY . .
 
-# Rendre le script executable et compiler le module TeaVM
+# Rendre le script exécutable et compiler le module TeaVM
 RUN chmod +x gradlew
 RUN ./gradlew :teavm:build --no-daemon -x test
 
