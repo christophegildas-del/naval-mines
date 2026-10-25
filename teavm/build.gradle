@@ -21,7 +21,7 @@ dependencies {
 teavm {
   js {
     mainClass = 'com.naval_mines.teavm.TeaVMLauncher'
-    // Rend le dossier de sortie explicite et prévisible
-    outputDir = file("build/dist/webapp")
+    // Forcer le dossier de sortie dans build/dist
+    outputDir = file("${buildDir}/dist")
   }
 }
