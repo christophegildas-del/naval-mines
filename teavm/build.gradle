@@ -14,17 +14,14 @@ repositories {
 
 dependencies {
   implementation project(':core')
-
-  // Backend TeaVM officiel pour LibGDX (sur Maven Central)
   implementation 'com.github.xpenatan.gdx-teavm:backend-teavm:1.0.0'
-
-  // Core LibGDX
   implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
 }
 
 teavm {
   js {
     mainClass = 'com.naval_mines.teavm.TeaVMLauncher'
-    outputDir = layout.buildDirectory.dir("dist/webapp").get().asFile
+    // Rend le dossier de sortie explicite et prévisible
+    outputDir = file("build/dist/webapp")
   }
 }
