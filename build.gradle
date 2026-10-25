@@ -80,3 +80,22 @@ subprojects {
 }
 
 eclipse.project.name = 'naval-mines' + '-parent'
+
+// Autoriser Gradle à satisfaire une demande JVM 8 avec un module compilé en JVM 17
+allprojects {
+  dependencies {
+    attributesSchema {
+      attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE) {
+        compatibilityRules.add(TargetJvmVersionCompatibilityRule)
+      }
+    }
+  }
+}
+
+class TargetJvmVersionCompatibilityRule implements AttributeCompatibilityRule<Integer> {
+  @Override
+  void execute(CompatibilityCheckDetails<Integer> details) {
+    // Accepte Java 17 même si le consommateur (TeaVM) réclame Java 8
+    details.compatible()
+  }
+}
