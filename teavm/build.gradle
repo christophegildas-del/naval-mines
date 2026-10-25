@@ -15,13 +15,13 @@ repositories {
 
 dependencies {
   implementation project(':core')
-  // Utilisation d'un commit hash / release valide sur JitPack
-  implementation 'com.github.mgsx-dev:gdx-teavm:c3df5e9'
+  // Utilisation de la dépendance officielle xoppa/gdx-teavm sur JitPack
+  implementation 'com.github.xoppa:gdx-teavm:master-SNAPSHOT'
 }
 
 teavm {
   js {
-    mainClass = 'com.naval_mines.teavm.TeaVMLauncher'
+    mainClass = 'com.monjeu.naval_mines.teavm.TeaVMLauncher' // Remplace avec ton package exact
     outputDir = layout.buildDirectory.dir("dist/webapp").get().asFile
   }
 }
