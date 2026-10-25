@@ -8,14 +8,20 @@ java {
   targetCompatibility = JavaVersion.VERSION_17
 }
 
+repositories {
+  mavenCentral()
+  maven { url 'https://jitpack.io' }
+}
+
 dependencies {
   implementation project(':core')
-  implementation "com.github.mgsx-dev.gdx-teavm:gdx-teavm:1.0.0"
+  // Utilisation du tag / commit valide sur JitPack pour gdx-teavm
+  implementation 'com.github.mgsx-dev:gdx-teavm:master-SNAPSHOT'
 }
 
 teavm {
   js {
-    mainClass = 'com.monjeu.teavm.TeaVMLauncher' // Adapte le chemin du package
+    mainClass = 'com.naval_mines.teavm.TeaVMLauncher'
     outputDir = layout.buildDirectory.dir("dist/webapp").get().asFile
   }
 }
