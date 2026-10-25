@@ -1,6 +1,6 @@
 plugins {
   id 'java'
-  id 'org.teavm' version '0.9.1' // Version alignée avec backend-teavm 1.0.0
+  id 'org.teavm' version '0.9.2'
 }
 
 java {
