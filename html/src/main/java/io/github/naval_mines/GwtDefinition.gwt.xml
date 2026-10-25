@@ -4,8 +4,14 @@
     <!-- Héritage du module LibGDX GWT principal -->
     <inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
 
+    <!-- Héritage du module Core (ton jeu) -->
+    <inherits name='Main' />
+
     <!-- Point d'entrée GWT -->
     <entry-point class='io.github.naval_mines.gwt.GwtLauncher' />
+
+    <!-- Indiquer à GWT que les sources de ce module sont dans le dossier 'gwt' -->
+    <source path="gwt" />
 
     <!-- Inclusion de la réflexion pour le package core -->
     <set-configuration-property name='gdx.reflect.include' value='io.github.naval_mines' />
