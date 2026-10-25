@@ -2,17 +2,15 @@ pluginManagement {
   repositories {
     gradlePluginPortal()
     mavenCentral()
-    maven { url 'https://jitpack.io' }
   }
 }
 
 dependencyResolutionManagement {
   repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
   }
 }
 
 
-rootProject.name = 'app'
+rootProject.name = 'naval_mines'
 include 'core', 'lwjgl3', 'teavm'

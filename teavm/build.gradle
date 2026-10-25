@@ -10,18 +10,23 @@ java {
 
 repositories {
   mavenCentral()
-  maven { url 'https://jitpack.io' }
 }
 
 dependencies {
   implementation project(':core')
-  // Utilisation de la dépendance officielle xoppa/gdx-teavm sur JitPack
-  implementation 'com.github.xoppa:gdx-teavm:master-SNAPSHOT'
+
+  // Dépendances TeaVM officielles publiées sur Maven Central
+  implementation 'org.teavm:teavm-classlib:0.9.2'
+  implementation 'org.teavm:teavm-jso:0.9.2'
+  implementation 'org.teavm:teavm-jso-apis:0.9.2'
+
+  // Core LibGDX
+  implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
 }
 
 teavm {
   js {
-    mainClass = 'com.monjeu.naval_mines.teavm.TeaVMLauncher' // Remplace avec ton package exact
+    mainClass = 'com.monjeu.naval_mines.teavm.TeaVMLauncher' // Remplace par ton package exact
     outputDir = layout.buildDirectory.dir("dist/webapp").get().asFile
   }
 }
