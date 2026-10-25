@@ -7,12 +7,16 @@ COPY . .
 RUN chmod +x gradlew
 RUN ./gradlew :html:dist --no-daemon -x test
 
-# Étape 2 : Serveur HTTP de production
-FROM eclipse-temurin:17-jre
-WORKDIR /app
+# Étape 2 : Serveur Web de production ultra-léger avec NGINX
+FROM nginx:alpine
+WORKDIR /usr/share/nginx/html
 
-COPY --from=build /app/html/build/dist /app/www
+# Nettoyer les fichiers par défaut de NGINX
+RUN rm -rf ./*
 
-EXPOSE 8080
+# Copier les fichiers statiques générés par GWT
+COPY --from=build /app/html/build/dist .
 
-CMD ["jwebserver", "-d", "/app/www", "-p", "8080", "-b", "0.0.0.0"]
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
