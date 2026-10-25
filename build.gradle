@@ -2,23 +2,9 @@ buildscript {
   repositories {
     mavenCentral()
     gradlePluginPortal()
-    mavenLocal()
-    google()
-    maven { url = 'https://central.sonatype.com/repository/maven-snapshots/' }
   }
-  dependencies {
-
-
-  }
-}
-
-
-allprojects {
-  apply plugin: 'java'
-
-  java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+  ext {
+    gdxVersion = '1.12.1'
   }
 }
 
@@ -26,63 +12,11 @@ allprojects {
   apply plugin: 'eclipse'
   apply plugin: 'idea'
 
-  // This allows you to "Build and run using IntelliJ IDEA", an option in IDEA's Settings.
-  idea {
-    module {
-      outputDir = file('build/classes/java/main')
-      testOutputDir = file('build/classes/java/test')
-    }
-  }
-}
-
-configure(subprojects) {
-  apply plugin: 'java-library'
-  java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-  }
-
-  // From https://lyze.dev/2021/04/29/libGDX-Internal-Assets-List/
-  // The article can be helpful when using assets.txt in your project.
-  tasks.register('generateAssetList') {
-    inputs.dir("${project.rootDir}/assets/")
-    // projectFolder/assets
-    File assetsFolder = new File("${project.rootDir}/assets/")
-    // projectFolder/assets/assets.txt
-    File assetsFile = new File(assetsFolder, "assets.txt")
-    // delete that file in case we've already created it
-    assetsFile.delete()
-
-    // iterate through all files inside that folder
-    // convert it to a relative path
-    // and append it to the file assets.txt
-    fileTree(assetsFolder).collect { assetsFolder.relativePath(it) }.sort().each {
-      assetsFile.append(it + "\n")
-    }
-  }
-  processResources.dependsOn 'generateAssetList'
-
-  compileJava {
-    options.incremental = true
-  }
-}
-
-subprojects {
-  version = "$projectVersion"
-  ext.appName = 'naval-mines'
   repositories {
     mavenCentral()
-    // You may want to remove the following line if you have errors downloading dependencies.
-    mavenLocal()
-    maven { url = 'https://central.sonatype.com/repository/maven-snapshots/' }
-    maven { url = 'https://jitpack.io' }
   }
-}
 
-eclipse.project.name = 'naval-mines' + '-parent'
-
-// Autoriser Gradle à satisfaire une demande JVM 8 avec un module compilé en JVM 17
-allprojects {
+  // Méthode 1 : Règle de compatibilité JVM pour débloquer le variant matching du plugin TeaVM
   dependencies {
     attributesSchema {
       attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE) {
@@ -92,10 +26,21 @@ allprojects {
   }
 }
 
+// Méthode 2 : Alignement global du bytecode sur Java 11 pour tous les sous-modules
+configure(subprojects) {
+  apply plugin: 'java-library'
+
+  java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+  }
+}
+
+// Implémentation de la règle de compatibilité d'attributs (Méthode 1)
 class TargetJvmVersionCompatibilityRule implements AttributeCompatibilityRule<Integer> {
   @Override
   void execute(CompatibilityCheckDetails<Integer> details) {
-    // Accepte Java 17 même si le consommateur (TeaVM) réclame Java 8
+    // Déclare les versions JVM demandées et fournies comme toujours compatibles
     details.compatible()
   }
 }
