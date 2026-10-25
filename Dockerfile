@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY . .
 
+
 RUN chmod +x gradlew
 
 # Compilation avec TeaVM en Java 17
