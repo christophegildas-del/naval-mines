@@ -15,8 +15,8 @@ repositories {
 
 dependencies {
   implementation project(':core')
-  // Utilisation du tag / commit valide sur JitPack pour gdx-teavm
-  implementation 'com.github.mgsx-dev:gdx-teavm:master-SNAPSHOT'
+  // Utilisation d'un commit hash / release valide sur JitPack
+  implementation 'com.github.mgsx-dev:gdx-teavm:1.0.0-b1'
 }
 
 teavm {
