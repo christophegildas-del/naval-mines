@@ -1,15 +1,16 @@
 package com.naval_mines.teavm;
 
-import com.github.xpenatan.gdx.backends.teavm.TeaVMApplication;
-import com.github.xpenatan.gdx.backends.teavm.TeaVMApplicationConfiguration;import com.naval_mines.Game; // Ton package exact dans /core
+import com.github.xpenatan.gdx.backends.teavm.TeaApplication;
+import com.github.xpenatan.gdx.backends.teavm.TeaApplicationConfiguration;
 import io.github.naval_mines.Main;
 
 public class TeaVMLauncher {
     public static void main(String[] args) {
-        TeaVMApplicationConfiguration config = new TeaVMApplicationConfiguration();
-        config.canvasId = "canvas";
+        // "canvas" correspond à l'ID de la balise <canvas id="canvas"></canvas> dans votre index.html
+        TeaApplicationConfiguration config = new TeaApplicationConfiguration("canvas");
         config.width = 800;
         config.height = 480;
-        new TeaVMApplication(new Main(), config);
+
+        new TeaApplication(new io.github.naval_mines.Main(), config);
     }
 }
