@@ -3,6 +3,8 @@ package io.github.naval_mines.gwt;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
+import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderCallback;
+import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderState;
 import io.github.naval_mines.Main;
 
 public class GwtLauncher extends GwtApplication {
@@ -18,5 +20,20 @@ public class GwtLauncher extends GwtApplication {
     @Override
     public ApplicationListener createApplicationListener() {
         return new Main();
+    }
+
+    @Override
+    public PreloaderCallback getPreloaderCallback() {
+        return new PreloaderCallback() {
+            @Override
+            public void error(String file) {
+                System.out.println("Erreur de chargement d'asset : " + file);
+            }
+
+            @Override
+            public void update(PreloaderState state) {
+                // Ignore l'état d'attente des assets
+            }
+        };
     }
 }

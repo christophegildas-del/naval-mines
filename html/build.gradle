@@ -49,4 +49,12 @@ sourceSets {
     // GWT considère les .java et .gwt.xml comme des ressources à parser
     resources.srcDirs += project(':core').sourceSets.main.java.srcDirs
   }
+
+  task copyAssets(type: Copy) {
+    from "../assets"
+    into "$buildDir/resources/main/assets"
+  }
+
+// Forcer la copie des assets avant le traitement des ressources
+  processResources.dependsOn copyAssets
 }
