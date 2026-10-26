@@ -8,6 +8,5 @@
     <entry-point class="io.github.naval_mines.gwt.GwtLauncher" />
 
     <set-configuration-property name="gdx.assetpath" value="../assets" />
-    <!-- Désactive le comportement strict d'attente d'assets -->
-    <set-configuration-property name="xsiframe.failIfScriptNotFound" value="false" />
+
 </module>
