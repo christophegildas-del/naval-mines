@@ -3,7 +3,6 @@ package io.github.naval_mines.gwt;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.badlogic.gdx.backends.gwt.preloader.Preloader;
 import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderCallback;
 import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderState;
 import io.github.naval_mines.Main;
@@ -33,8 +32,7 @@ public class GwtLauncher extends GwtApplication {
 
             @Override
             public void update(PreloaderState state) {
-                logToBrowser("[GWT Preloader] Progression : "
-                    + state.getLoaded() + " / " + state.hasEnded());
+                logToBrowser("[GWT Preloader] Terminé: " + state.hasEnded());
             }
         };
     }
