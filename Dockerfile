@@ -4,23 +4,23 @@ WORKDIR /app
 
 COPY . .
 
-# 1. Créer le dossier assets et un fichier bidon AVANT la compilation
-# Cela force LibGDX à générer un 'assets.txt' avec le formatage interne exact attendu par GWT.
-RUN mkdir -p assets && echo "keep" > assets/keep.txt
-
 RUN chmod +x gradlew
-# 2. La tâche :html:dist va lire assets/keep.txt et créer /app/html/build/dist/assets/assets.txt
 RUN ./gradlew :html:dist --no-daemon -x test
 
 # Étape 2 : Serveur Web de production NGINX
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 
-# Nettoyer les fichiers NGINX par défaut
+# 1. Nettoyer les fichiers par défaut
 RUN rm -rf ./*
 
-# 3. Copier l'intégralité du build (index.html, js, et le dossier assets généré)
+# 2. Copier le build web généré par GWT
 COPY --from=build /app/html/build/dist .
+
+# 3. LE CORRECTIF ABSOLU : Créer un faux asset parfaitement formaté pour LibGDX
+RUN mkdir -p assets && \
+    echo -n "keep" > assets/keep.txt && \
+    echo "t:4:text/plain:keep.txt" > assets/assets.txt
 
 EXPOSE 80
 
