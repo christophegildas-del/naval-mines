@@ -11,14 +11,11 @@ RUN ./gradlew :html:dist --no-daemon -x test
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 
-# Nettoyer les fichiers par défaut
+# Nettoyer les fichiers NGINX par défaut
 RUN rm -rf ./*
 
-# Copier le contenu principal du build web (html.nocache.js, index.html, etc.)
+# Copier TOUT le contenu distribué (HTML, JS, assets générés)
 COPY --from=build /app/html/build/dist .
-
-# Copier explicitement le dossier assets généré par GWT
-COPY --from=build /app/html/build/dist/assets ./assets
 
 EXPOSE 80
 
