@@ -57,4 +57,25 @@ sourceSets {
 
 // Forcer la copie des assets avant le traitement des ressources
   processResources.dependsOn copyAssets
+
+  task generateAssetList {
+    doLast {
+      File assetsFolder = new File("${project.rootDir}/assets")
+      File assetsFile = new File(assetsFolder, "assets.txt")
+      if (assetsFile.exists()) {
+        assetsFile.delete()
+      }
+      if (assetsFolder.exists()) {
+        assetsFolder.eachFileRecurse { file ->
+          if (!file.isDirectory() && !file.name.equals("assets.txt")) {
+            String relativePath = assetsFolder.relativePath(file).replace('\\', '/')
+            assetsFile.append(relativePath + "\n")
+          }
+        }
+      }
+    }
+  }
+
+// Générer la liste des assets avant le build Web
+  compileJava.dependsOn generateAssetList
 }
