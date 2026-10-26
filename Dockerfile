@@ -4,6 +4,9 @@ WORKDIR /app
 
 COPY . .
 
+# S'assurer qu'un fichier d'asset existe pour l'indexation GWT
+RUN mkdir -p assets && echo "keep" > assets/keep.txt
+
 RUN chmod +x gradlew
 RUN ./gradlew :html:dist --no-daemon -x test
 
@@ -13,12 +16,8 @@ WORKDIR /usr/share/nginx/html
 
 RUN rm -rf ./*
 
+# Copier le contenu distribué du build web GWT
 COPY --from=build /app/html/build/dist .
-
-# Créer un dossier assets basique pour éviter toute erreur 404
-RUN mkdir -p assets && \
-    echo "keep" > assets/keep.txt && \
-    echo "t:4:text/plain:keep.txt" > assets/assets.txt
 
 EXPOSE 80
 
