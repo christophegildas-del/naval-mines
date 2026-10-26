@@ -4,6 +4,8 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.badlogic.gdx.backends.gwt.preloader.Preloader;
+import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderCallback;
+import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderState;
 import io.github.naval_mines.Main;
 
 public class GwtLauncher extends GwtApplication {
@@ -22,22 +24,22 @@ public class GwtLauncher extends GwtApplication {
     }
 
     @Override
-    public Preloader.PreloaderCallback getPreloaderCallback() {
-        return new Preloader.PreloaderCallback() {
+    public PreloaderCallback getPreloaderCallback() {
+        return new PreloaderCallback() {
             @Override
             public void error(String file) {
-                consoleLog("[GWT Preloader] ERREUR Fichier : " + file);
+                logToBrowser("[GWT Preloader] ERREUR Fichier : " + file);
             }
 
             @Override
-            public void update(Preloader.PreloaderState state) {
-                consoleLog("[GWT Preloader] Progression : "
-                    + state.getDownloaded() + " / " + state.getKnownTotal());
+            public void update(PreloaderState state) {
+                logToBrowser("[GWT Preloader] Progression : "
+                    + state.getLoaded() + " / " + state.hasEnded());
             }
         };
     }
 
-    private static native void consoleLog(String msg) /*-{
+    private static native void logToBrowser(String msg) /*-{
         console.log(msg);
     }-*/;
 }
