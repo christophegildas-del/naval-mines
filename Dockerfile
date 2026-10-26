@@ -7,6 +7,14 @@ COPY . .
 RUN chmod +x gradlew
 RUN ./gradlew :html:dist --no-daemon -x test
 
+# Créer un asset placeholder et générer le fichier assets.txt requis par LibGDX GWT
+RUN mkdir -p /app/assets && echo "keep" > /app/assets/keep.txt
+RUN cd /app/assets && find . -type f ! -name "assets.txt" | sed 's|^\./||' > assets.txt
+
+# Copier le dossier assets indexé dans le dossier dist avant l'export Nginx
+RUN mkdir -p /app/html/build/dist/assets
+RUN cp -r /app/assets/* /app/html/build/dist/assets/
+
 # Étape 2 : Serveur Web de production NGINX
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
@@ -14,7 +22,7 @@ WORKDIR /usr/share/nginx/html
 # Nettoyer les fichiers NGINX par défaut
 RUN rm -rf ./*
 
-# Copier les fichiers statiques générés (index.html, JS et assets/assets.txt)
+# Copier le dossier dist complet (contenant index.html, JS et assets/assets.txt)
 COPY --from=build /app/html/build/dist .
 
 EXPOSE 80
