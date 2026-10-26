@@ -2,95 +2,51 @@ package io.github.naval_mines;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import io.github.naval_mines.model.GameCell;
-import io.github.naval_mines.model.Grid;
-import io.github.naval_mines.model.Mine;
-import io.github.naval_mines.model.Ship;
 
 public class Main extends ApplicationAdapter {
     private ShapeRenderer shapeRenderer;
-    private Grid grid;
-
-    // Dimensions de la grille
-    private static final int GRID_WIDTH = 20;
-    private static final int GRID_HEIGHT = 20;
-    private static final float CELL_SIZE = 25f;
-
-    // Décalage pour centrer la grille à l'écran (800x600)
-    private float offsetX;
-    private float offsetY;
+    private boolean hasError = false;
+    private String errorMessage = "";
 
     @Override
     public void create() {
-        shapeRenderer = new ShapeRenderer();
-
-        // 1. Initialisation du modèle et placement aléatoire
-        grid = new Grid(GRID_WIDTH, GRID_HEIGHT);
-        grid.setupRandomFleetAndMines();
-
-        // 2. Calcul du centrage
-        offsetX = (Gdx.graphics.getWidth() - (GRID_WIDTH * CELL_SIZE)) / 2f;
-        offsetY = (Gdx.graphics.getHeight() - (GRID_HEIGHT * CELL_SIZE)) / 2f;
+        try {
+            shapeRenderer = new ShapeRenderer();
+            // Initialisation de ta grille / jeu ici
+        } catch (Throwable t) {
+            hasError = true;
+            errorMessage = t.getMessage();
+            Gdx.app.error("Main", "Erreur dans create(): ", t);
+        }
     }
 
     @Override
     public void render() {
-        // Effacer l'écran (fond bleu marine très foncé)
-        Gdx.gl.glClearColor(0.05f, 0.1f, 0.15f, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        // Rendu de chaque cellule
-        for (int x = 0; x < grid.getWidth(); x++) {
-            for (int y = 0; y < grid.getHeight(); y++) {
-                GameCell cell = grid.getCell(x, y);
-                float drawX = offsetX + (x * CELL_SIZE);
-                float drawY = offsetY + (y * CELL_SIZE);
-
-                // 1. Dessiner l'arrière-plan de la case
-                if (cell.isRevealed()) {
-                    shapeRenderer.setColor(Color.LIGHT_GRAY);
-                } else {
-                    shapeRenderer.setColor(Color.ROYAL);
-                }
-                shapeRenderer.rect(drawX + 1, drawY + 1, CELL_SIZE - 2, CELL_SIZE - 2);
-
-                // 2. Si la case est révélée, afficher son contenu
-                if (cell.isRevealed() && cell.hasEntity()) {
-                    if (cell.getEntity() instanceof Ship) {
-                        // Navire : carré rouge
-                        shapeRenderer.setColor(Color.RED);
-                        shapeRenderer.rect(drawX + 8, drawY + 8, CELL_SIZE - 16, CELL_SIZE - 16);
-                    } else if (cell.getEntity() instanceof Mine) {
-                        // Mine : cercle noir
-                        shapeRenderer.setColor(Color.BLACK);
-                        shapeRenderer.circle(drawX + (CELL_SIZE / 2f), drawY + (CELL_SIZE / 2f), CELL_SIZE / 4f);
-                    }
-                }
-            }
+        if (hasError) {
+            // Affiche un fond rouge vif si une erreur est survenue
+            Gdx.gl.glClearColor(1, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            return;
         }
 
-        shapeRenderer.end();
+        try {
+            // Effacer l'écran (fond bleu foncé)
+            Gdx.gl.glClearColor(0.05f, 0.1f, 0.16f, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Contour de la grille en lignes blanches
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.WHITE);
-        for (int x = 0; x < grid.getWidth(); x++) {
-            for (int y = 0; y < grid.getHeight(); y++) {
-                float drawX = offsetX + (x * CELL_SIZE);
-                float drawY = offsetY + (y * CELL_SIZE);
-                shapeRenderer.rect(drawX, drawY, CELL_SIZE, CELL_SIZE);
-            }
+            // Ton code de rendu avec ShapeRenderer ici
+        } catch (Throwable t) {
+            hasError = true;
+            Gdx.app.error("Main", "Erreur dans render(): ", t);
         }
-        shapeRenderer.end();
     }
 
     @Override
     public void dispose() {
-        shapeRenderer.dispose();
+        if (shapeRenderer != null) {
+            shapeRenderer.dispose();
+        }
     }
 }
