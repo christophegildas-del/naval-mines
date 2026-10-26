@@ -3,7 +3,7 @@ package io.github.naval_mines.gwt;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.google.gwt.core.client.GWT;
+import com.badlogic.gdx.backends.gwt.preloader.Preloader;
 import io.github.naval_mines.Main;
 
 public class GwtLauncher extends GwtApplication {
@@ -18,13 +18,26 @@ public class GwtLauncher extends GwtApplication {
 
     @Override
     public ApplicationListener createApplicationListener() {
-        GWT.setUncaughtExceptionHandler(e ->
-            consoleError("GWT Uncaught Exception: " + e.getMessage())
-        );
         return new Main();
     }
 
-    private static native void consoleError(String msg) /*-{
-        console.error(msg);
+    @Override
+    public Preloader.PreloaderCallback getPreloaderCallback() {
+        return new Preloader.PreloaderCallback() {
+            @Override
+            public void error(String file) {
+                consoleLog("[GWT Preloader] ERREUR Fichier : " + file);
+            }
+
+            @Override
+            public void update(Preloader.PreloaderState state) {
+                consoleLog("[GWT Preloader] Progression : "
+                    + state.getDownloaded() + " / " + state.getKnownTotal());
+            }
+        };
+    }
+
+    private static native void consoleLog(String msg) /*-{
+        console.log(msg);
     }-*/;
 }
