@@ -7,19 +7,17 @@ COPY . .
 RUN chmod +x gradlew
 RUN ./gradlew :html:dist --no-daemon -x test
 
-# Étape 2 : Serveur Web de production NGINX
+# Étape 2 : NGINX Production
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 
-# 1. Nettoyer les fichiers par défaut
 RUN rm -rf ./*
 
-# 2. Copier le build web généré par GWT
 COPY --from=build /app/html/build/dist .
 
-# 3. LE CORRECTIF ABSOLU : Créer un faux asset parfaitement formaté pour LibGDX
+# Créer un dossier assets basique pour éviter toute erreur 404
 RUN mkdir -p assets && \
-    echo -n "keep" > assets/keep.txt && \
+    echo "keep" > assets/keep.txt && \
     echo "t:4:text/plain:keep.txt" > assets/assets.txt
 
 EXPOSE 80

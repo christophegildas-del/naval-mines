@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE module PUBLIC "-//Google Inc.//DTD GWT 2.9.0//EN" "http://www.gwtproject.org/doctype/2.9.0/gwt-module.dtd">
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.8.2//EN"
+        "http://www.gwtproject.org/doctype/2.8.2/gwt-module.dtd">
 <module rename-to="html">
-    <!-- Héritage du module LibGDX GWT principal -->
-    <inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
+    <inherits name="com.badlogic.gdx.backends.gdx_backends_gwt" />
+    <inherits name="io.github.naval_mines.Core" />
 
-    <!-- Héritage du module Core -->
-    <inherits name='io.github.naval_mines.Main' />
+    <entry-point class="io.github.naval_mines.gwt.GwtLauncher" />
 
-    <!-- Point d'entrée GWT -->
-    <entry-point class='io.github.naval_mines.gwt.GwtLauncher' />
-
-    <!-- Indiquer à GWT où se trouvent les sources du module html -->
-    <source path="gwt" />
-
-    <!-- Indiquer à LibGDX le chemin relatif vers le dossier des assets -->
     <set-configuration-property name="gdx.assetpath" value="../assets" />
-
-    <!-- Inclusion de la réflexion pour le package core -->
-    <set-configuration-property name='gdx.reflect.include' value='io.github.naval_mines' />
+    <!-- Désactive le comportement strict d'attente d'assets -->
+    <set-configuration-property name="xsiframe.failIfScriptNotFound" value="false" />
 </module>
