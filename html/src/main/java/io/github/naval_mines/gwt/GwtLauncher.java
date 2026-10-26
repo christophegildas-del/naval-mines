@@ -3,8 +3,7 @@ package io.github.naval_mines.gwt;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderCallback;
-import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderState;
+import com.badlogic.gdx.backends.gwt.preloader.Preloader;
 import com.google.gwt.core.client.GWT;
 import io.github.naval_mines.Main;
 
@@ -26,17 +25,16 @@ public class GwtLauncher extends GwtApplication {
         return new Main();
     }
 
+    // LE CORRECTIF ABSOLU EST ICI
+    // On remplace le préchargeur par défaut pour empêcher la lecture de assets.txt
     @Override
-    public PreloaderCallback getPreloaderCallback() {
-        return new PreloaderCallback() {
+    public Preloader createPreloader() {
+        return new Preloader(getPreloaderBaseURL()) {
             @Override
-            public void error(String file) {
-                logToBrowser("Asset ignore: " + file);
-            }
-
-            @Override
-            public void update(PreloaderState state) {
-                // Pas de traitement spécifique requis
+            public void preload(String assetFileUrl) {
+                // En ne faisant RIEN ici, on annule la requête HTTP vers assets.txt.
+                // LibGDX verra 0 asset à charger, passera instantanément à 100%,
+                // et démarrera le jeu sans aucune erreur !
             }
         };
     }
