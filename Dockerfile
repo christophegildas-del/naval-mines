@@ -16,8 +16,12 @@ RUN rm -rf ./*
 # Copier la distribution GWT générée
 COPY --from=build /app/html/build/dist .
 
-# Créer un répertoire assets avec un assets.txt vide (0 octet)
-RUN mkdir -p assets && touch assets/assets.txt
+# LA CORRECTION : Détruire le dossier assets potentiellement corrompu par Gradle,
+# et recréer un fichier de 0 octet avec les bonnes permissions
+RUN rm -rf assets && \
+    mkdir assets && \
+    touch assets/assets.txt && \
+    chmod -R 755 assets
 
 EXPOSE 80
 
