@@ -4,20 +4,22 @@ WORKDIR /app
 
 COPY . .
 
-# S'assurer qu'un fichier d'asset existe pour l'indexation GWT
-RUN mkdir -p assets && echo "keep" > assets/keep.txt
-
 RUN chmod +x gradlew
 RUN ./gradlew :html:dist --no-daemon -x test
 
-# Étape 2 : NGINX Production
+# Étape 2 : Serveur Web NGINX
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 
 RUN rm -rf ./*
 
-# Copier le contenu distribué du build web GWT
+# Copie de la distribution GWT
 COPY --from=build /app/html/build/dist .
+
+# Ingestion garantie d'un asset valide de 5 octets
+RUN mkdir -p assets && \
+    echo "keep" > assets/keep.txt && \
+    echo "t:5:text/plain:keep.txt" > assets/assets.txt
 
 EXPOSE 80
 
