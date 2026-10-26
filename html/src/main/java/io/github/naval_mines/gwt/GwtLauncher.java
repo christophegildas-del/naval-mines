@@ -3,7 +3,8 @@ package io.github.naval_mines.gwt;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.badlogic.gdx.backends.gwt.preloader.Preloader;
+import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderCallback;
+import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderState;
 import com.google.gwt.core.client.GWT;
 import io.github.naval_mines.Main;
 
@@ -35,7 +36,7 @@ public class GwtLauncher extends GwtApplication {
 
             @Override
             public void update(PreloaderState state) {
-                // Pas de blocage sur l'état des assets
+                // Pas de traitement spécifique requis
             }
         };
     }

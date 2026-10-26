@@ -11,11 +11,13 @@ RUN ./gradlew :html:dist --no-daemon -x test
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 
-# Nettoyer le dossier par défaut de NGINX
 RUN rm -rf ./*
 
-# Copier l'intégralité du build web dist
+# Copier la distribution GWT générée
 COPY --from=build /app/html/build/dist .
+
+# Créer un répertoire assets avec un assets.txt vide (0 octet)
+RUN mkdir -p assets && touch assets/assets.txt
 
 EXPOSE 80
 
