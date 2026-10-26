@@ -3,8 +3,8 @@ package io.github.naval_mines.gwt;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderCallback;
-import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderState;
+import com.badlogic.gdx.backends.gwt.preloader.Preloader;
+import com.google.gwt.core.client.GWT;
 import io.github.naval_mines.Main;
 
 public class GwtLauncher extends GwtApplication {
@@ -19,6 +19,9 @@ public class GwtLauncher extends GwtApplication {
 
     @Override
     public ApplicationListener createApplicationListener() {
+        GWT.setUncaughtExceptionHandler(e ->
+            logToBrowser("GWT Exception: " + e.getMessage())
+        );
         return new Main();
     }
 
@@ -27,12 +30,12 @@ public class GwtLauncher extends GwtApplication {
         return new PreloaderCallback() {
             @Override
             public void error(String file) {
-                logToBrowser("[GWT Preloader] ERREUR Fichier : " + file);
+                logToBrowser("Asset ignore: " + file);
             }
 
             @Override
             public void update(PreloaderState state) {
-                logToBrowser("[GWT Preloader] Terminé: " + state.hasEnded());
+                // Pas de blocage sur l'état des assets
             }
         };
     }

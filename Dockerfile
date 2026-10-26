@@ -7,19 +7,15 @@ COPY . .
 RUN chmod +x gradlew
 RUN ./gradlew :html:dist --no-daemon -x test
 
-# Étape 2 : Serveur Web NGINX
+# Étape 2 : Serveur Web de production NGINX
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 
+# Nettoyer le dossier par défaut de NGINX
 RUN rm -rf ./*
 
-# Copie de la distribution GWT
+# Copier l'intégralité du build web dist
 COPY --from=build /app/html/build/dist .
-
-# Ingestion garantie d'un asset valide de 5 octets
-RUN mkdir -p assets && \
-    echo "keep" > assets/keep.txt && \
-    echo "t:5:text/plain:keep.txt" > assets/assets.txt
 
 EXPOSE 80
 
